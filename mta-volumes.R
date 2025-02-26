@@ -184,7 +184,7 @@ kjhmisc::save_figure(here("figures", "tsa_volumes_daily"), out_tsa_daily, height
 out_tsa_daily_sample <- tsa |>
   filter(date > ymd("2019-09-30") & date < ymd("2019-11-01")) |>
   ggplot(aes(x = date, y = count)) +
-  geom_line(linewidth = 0.3) +
+  geom_line(linewidth = 0.85) +
   scale_y_continuous(labels = label_number(scale_cut = cut_short_scale())) +
   scale_x_date(date_breaks = "1 day",
                date_labels = "%a",
