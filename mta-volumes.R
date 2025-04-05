@@ -62,7 +62,10 @@ select(date, mode, count)
 
 tsa
 
-mta <- read_csv(here("raw", "MTA_Daily_Ridership_and_Traffic__Beginning_2020_20250219.csv")) |>
+# MTA_Daily_Ridership_and_Traffic__Beginning_2020_20250219.csv
+# MTA_Daily_Ridership_and_Traffic__Beginning_2020_20250405.csv
+
+mta <- read_csv(here("raw", "MTA_Daily_Ridership_and_Traffic__Beginning_2020_20250405.csv")) |>
   janitor::clean_names() |>
   mutate(date = mdy(date))
 
@@ -100,12 +103,12 @@ weekly_volume_labs <- avg_weekly_volume |>
   filter(yrwk == ymd("2024-12-16")) |>
   arrange(desc(avg_vol)) |>
   mutate(mode_rc_ord = factor(mode_rc, levels = level_order, ordered = TRUE),
-         adj = c(3.2e5, -4e5, 2.8e5, -1.5e5, 1e5),
+         adj = c(3.2e5, -6e5, 2.8e5, -2.3e5, -2e5),
          avg_adj = avg_vol + adj)
 
 out <- avg_weekly_volume |>
   mutate(mode_rc_ord = factor(mode_rc, levels = rev(level_order), ordered = TRUE)) |>
-  filter(yrwk < ymd("2024-12-20") & yrwk > ymd("2022-01-01")) |>
+  filter(yrwk < ymd("2025-04-01") & yrwk > ymd("2022-01-01")) |>
   ggplot(aes(x = yrwk, y = avg_vol, color = mode_rc_ord)) +
   geom_line(linewidth = 1.75) +
   ggrepel::geom_text_repel(
@@ -126,7 +129,7 @@ out <- avg_weekly_volume |>
   guides(color = "none") +
   labs(x = "Weeks", y = "Average Volume (Millions)",
        color = "",
-       title = "New York MTA Average Daily Ridership and Traffic, 2022-2024",
+       title = "New York MTA Average Daily Ridership and Traffic, 2022-2025",
        subtitle = "With National TSA Airport Passenger Volumes for Comparison",
        caption = "Data: tsa.gov and data.ny.gov. Figure: Kieran Healy / @kjhealy") +
   theme(legend.text = element_text(size = rel(1.4)),
@@ -136,7 +139,9 @@ out <- avg_weekly_volume |>
         axis.text = element_text(size = rel(1.4)),
         axis.title = element_text(size = rel(1.6)))
 
-kjhmisc::save_figure(here("figures", "mta_volumes"), out, height = 11, width = 16)
+out
+
+kjhmisc::save_figure(here("figures", "mta_volumes"), out, height = 11, width = 18)
 
 ### Further plots and aggregations
 tsa_mta |>
@@ -279,3 +284,6 @@ subway_weekly_df <- mta |>
 
 write_csv(subway_weekly_df, here("data", "subway_weekly_ridership.csv"))
 saveRDS(subway_weekly_df, file = here("data", "subway_weekly_df.rda"))
+
+tail(avg_weekly_volume)
+
