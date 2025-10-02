@@ -1,5 +1,7 @@
 # MTA/TSA Examples
 
+## Kieran Healy
+
 The plots won't be directly reproducible because they use a theme not included in the repo.
 
 ![](figures/tsa_volumes_wkly.png)
